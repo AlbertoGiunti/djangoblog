@@ -13,7 +13,8 @@ def create_profile(sender, instance, created,
     if created:
         Profile.objects.create(user=instance)  # crea un profilo per ogni utente creato
 
+
 # Per salvare la foto profilo
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
-    instance.profile.save() # salva il profilo per ogni utente creato
+    instance.profile.save()  # salva il profilo per ogni utente creato

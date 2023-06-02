@@ -19,17 +19,32 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
+# @login_required decorator ensures that only logged in users can access this view
+@login_required
 def profile(request):
     return render(request, 'users/profile.html')
 
 
-# login required è un decorator che ci permette di accedere alla pagina solo se si è loggati
-@login_required()
-def profile(request):
-    u_form = UserUpdateForm()
-    p_form = ProfileUpdateForm()
+@login_required
+def profile_update(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,
+                                   request.FILES,
+                                   instance=request.user.profile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile')
+
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
     context = {
-        'u_form': u_form,
-        'p_form': p_form
+        "u_form": u_form,
+        "p_form": p_form
     }
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile_update.html', context)
