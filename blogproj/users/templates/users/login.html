@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+<!-- I want to load the external library crispy_forms_tags in my html -->
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <div class="content-section">
+        <form action="" method="post">
+            {% csrf_token %}  # Cross Site Request Forgery Token to prevent malicious attacks
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Sign In</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Log In</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">Do you need an account? <a href="{% url 'register' %}">Register now</a></small>
+        </div>
+
+    </div>
+{% endblock content %}
