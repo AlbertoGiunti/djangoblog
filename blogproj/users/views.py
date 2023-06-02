@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, ProfileUpdateForm, UserUpdateForm
+from django.contrib.auth.decorators import login_required
 
 
 def register(request):
@@ -17,4 +18,18 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
-# Create your views here.
+
+def profile(request):
+    return render(request, 'users/profile.html')
+
+
+# login required è un decorator che ci permette di accedere alla pagina solo se si è loggati
+@login_required()
+def profile(request):
+    u_form = UserUpdateForm()
+    p_form = ProfileUpdateForm()
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+    return render(request, 'users/profile.html', context)

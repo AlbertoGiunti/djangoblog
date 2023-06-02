@@ -26,7 +26,7 @@
           </buttwon>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated %}  <!-- Se l'utente è autenticato cambia i pulsanti che vede l'utente -->
               <a class="nav-item nav-link" href="{% url 'blog-home' %}">HOME</a> <!-- Link alla HomePage del blog -->
               <a class="nav-item nav-link" href="{% url 'blog-about' %}">ABOUT</a>
             </div>
@@ -43,21 +43,21 @@
                 <span></span>
                 Create Post
             </a>
-                <a href="#" id="auth-links">
+                <a href="{% url 'profile' %}" id="auth-links">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
                 Profile
             </a>
-                <a href="#" id="auth-links">
+                <a href="{% url 'logout' %}" id="auth-links">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
                 Logout
             </a>
-                {% else %}
+                {% else %}  <!-- Se l'utente non è autenticato cambia i pulsanti che vede l'utente -->
               <a href="{% url 'login' %}" id="auth-links">
                 <span></span>
                 <span></span>
@@ -79,7 +79,7 @@
                 <span></span>
                 Neon button
             </a> -->
-                {% endif %}
+                {% endif %}  <!-- Fine if -->
             </div>
           </div>
         </div>
@@ -157,7 +157,7 @@
             <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
           </ul>
-          <p class="text-center text-muted">&copy; Desphixs 2021</p>
+          <p class="text-center text-muted">@ Alberto Giunti</p>
         </footer>
 
     </main>
