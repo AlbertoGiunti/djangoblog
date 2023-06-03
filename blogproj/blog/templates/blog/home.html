@@ -1,18 +1,23 @@
 {% extends 'blog/base.html' %}
-{% block content %}
 
-    {% for posts in posts %}
+{% block content %}
+    {% for post in posts %}
         <article class="media content-section">
-            <img class="rounded-cirlce article-img" src="{{ posts.author.profile.image.url }}" alt="">
             <div class="media-body">
-              <div class="article-metadata">
-                <a class="mr-2" href="#">{{ posts.author }}</a>
-                <small class="text-muted">{{ posts.date_posted }}</small>
-              </div>
-              <h2><a class="article-title" href="{% url 'blog-detail' posts.id %}">{{ posts.title }}</a></h2>
-              <p class="article-content">{{ posts.content }}</p>
+                <div class="row">
+                    <div class="col-md-2 d-flex align-items-center">
+                        <img class="rounded-circle article-img img-fluid mx-auto d-block" src="{{ post.author.profile.image.url }}" alt="">
+                    </div>
+                    <div class="col-md-10">
+                        <div class="article-metadata">
+                            <a class="mr-2" href="{% url 'profile' post.author.username %}">{{ post.author }}</a>
+                            <small class="text-muted">{{ post.date_posted }}</small>
+                        </div>
+                        <h2><a class="article-title" href="{% url 'blog-detail' post.id %}">{{ post.title }}</a></h2>
+                        <p class="article-content">{{ post.content }}</p>
+                    </div>
+                </div>
             </div>
-            <br>
-          </article>
-    {% endfor  %}
+        </article>
+    {% endfor %}
 {% endblock content %}

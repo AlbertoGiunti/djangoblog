@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .forms import UserRegisterForm, ProfileUpdateForm, UserUpdateForm
+from .forms import UserRegisterForm, ProfileUpdateForm, ProfileReadOnlyForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -19,32 +19,24 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
-# @login_required decorator ensures that only logged in users can access this view
-@login_required
-def profile(request):
-    return render(request, 'users/profile.html')
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
+    form = ProfileReadOnlyForm(instance=user.profile)
+    return render(request, 'users/profile.html', {'user': user, 'form': form})
 
 
 @login_required
 def profile_update(request):
+    user = request.user
     if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
-
+        u_form = ProfileUpdateForm(request.POST, instance=user)
+        p_form = ProfileReadOnlyForm(request.POST, request.FILES, instance=user.profile)
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been updated!')
-            return redirect('profile')
-
+            return redirect('profile', username=user.username)
     else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
+        u_form = ProfileUpdateForm(instance=user)
+        p_form = ProfileReadOnlyForm(instance=user.profile)
+    return render(request, 'users/profile_update.html', {'u_form': u_form, 'p_form': p_form})
 
-    context = {
-        "u_form": u_form,
-        "p_form": p_form
-    }
-    return render(request, 'users/profile_update.html', context)

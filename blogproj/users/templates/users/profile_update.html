@@ -13,7 +13,9 @@
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Update</button>
-                   <button class="btn btn-outline-info" type="submit"><a href="{% url 'profile' %}">Go Back</a></button>
+                <button class="btn btn-outline-info" type="submit">
+                    <a href="{% url 'profile' username=request.user.username %}">Go Back</a>
+                </button>
             </div>
 
         </form>
